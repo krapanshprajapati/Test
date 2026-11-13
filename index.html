@@ -1,0 +1,211 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Maths Mock Test</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: single centered test column; owner-only visitors panel above it */
+:root{--bg:#f4f6fb;--card:#ffffff;--tx:#1a2236;--mut:#5f6b82;--pri:#2c55d6;--onpri:#ffffff;--ok:#15803d;--bad:#c62828;--bd:#dde2ee;--okbg:#e4f5ea;--badbg:#fbe7e7;--selbg:#e6ecfd;
+--font:"Noto Sans Devanagari","Inter",system-ui,sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0f131c;--card:#181d29;--tx:#e6e9f2;--mut:#9aa4ba;--pri:#6f93ff;--onpri:#0f131c;--ok:#5fd08a;--bad:#ff8a8a;--bd:#2a3144;--okbg:#14301f;--badbg:#3a1a1a;--selbg:#1b2748;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f131c;--card:#181d29;--tx:#e6e9f2;--mut:#9aa4ba;--pri:#6f93ff;--onpri:#0f131c;--ok:#5fd08a;--bad:#ff8a8a;--bd:#2a3144;--okbg:#14301f;--badbg:#3a1a1a;--selbg:#1b2748;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--font);font-size:16px;line-height:1.5;padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:560px;margin:0 auto;min-width:0}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:14px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;color:var(--mut);flex-wrap:wrap}
+.timer{font-weight:700;font-size:22px;color:var(--pri);font-variant-numeric:tabular-nums}
+.timer.low{color:var(--bad)}
+.bar{height:6px;background:var(--bd);border-radius:4px;margin:10px 0 16px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--pri);width:100%}
+h1,h2{line-height:1.45;margin:0 0 12px;text-wrap:balance}
+h1{font-size:22px}
+h2{font-size:18px}
+h2.en{font-size:16px;font-weight:500;color:var(--mut)}
+.opt{display:block;width:100%;text-align:left;padding:13px 14px;margin-bottom:10px;border:1.5px solid var(--bd);border-radius:10px;background:transparent;color:var(--tx);font:inherit;cursor:pointer}
+.opt:focus-visible,.btn:focus-visible,.link:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.opt.sel{border-color:var(--pri);background:var(--selbg)}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}
+.opt.bad{border-color:var(--bad);background:var(--badbg)}
+.btn{width:100%;padding:14px;border:0;border-radius:10px;background:var(--pri);color:var(--onpri);font:inherit;font-weight:600;cursor:pointer}
+.link{background:none;border:0;color:var(--pri);font:inherit;font-weight:600;cursor:pointer;padding:0}
+.score{font-size:44px;font-weight:800;text-align:center;margin:6px 0;font-variant-numeric:tabular-nums}
+.sm{font-size:14px;color:var(--mut)}
+.tag{font-size:12px;padding:2px 8px;border-radius:6px;background:var(--bd);color:var(--tx)}
+.center{text-align:center}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd);white-space:nowrap}
+th{color:var(--mut);font-weight:600}
+.pill{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--bd)}
+.pill.done{background:var(--okbg);color:var(--ok);border-color:transparent}
+.pill.run{background:var(--selbg);color:var(--pri);border-color:transparent}
+.note{font-size:13px;color:var(--mut);margin:0 0 14px}
+</style>
+
+<div class="wrap">
+  <div id="owner" hidden></div>
+  <div id="app"></div>
+  <p class="note" id="foot" hidden>इस test का owner देख सकता है कि आपने link खोला, test शुरू किया और कितना स्कोर किया। / The test owner can see that you opened this link, started the test and your score.</p>
+</div>
+
+<script>
+const SEC = 60;
+const Q = [
+ {t:"गणित / Maths",
+  q:"अमन 3 पेन और 2 नोटबुक ₹110 में खरीदता है। यदि एक पेन की कीमत एक नोटबुक की कीमत से ₹20 अधिक है, तो एक नोटबुक की कीमत कितनी होगी?",
+  qe:"Aman buys 3 pens and 2 notebooks for ₹110. If the price of one pen is ₹20 more than the price of one notebook, what is the price of one notebook?",
+  o:["₹20","₹30","₹10","₹25"], a:2,
+  e:"नोटबुक = n, पेन = n + 20। 3(n + 20) + 2n = 110 → 5n + 60 = 110 → n = ₹10",
+  ee:"Notebook = n, Pen = n + 20. 3(n + 20) + 2n = 110 → 5n + 60 = 110 → n = ₹10"},
+ {t:"गणित / Maths",
+  q:"10 कुर्सियों की कीमत 4 मेजों की कीमत के बराबर है। 15 कुर्सियों और 2 मेजों की कुल कीमत ₹4000 है। तो 12 कुर्सियों और 3 मेजों की कुल कीमत कितनी होगी?",
+  qe:"The cost of 10 chairs equals the cost of 4 tables. The total cost of 15 chairs and 2 tables is ₹4000. What will be the total cost of 12 chairs and 3 tables?",
+  o:["₹3840","₹3750","₹3900","₹3500"], a:2,
+  e:"10c = 4t → t = 2.5c। 15c + 2(2.5c) = 20c = 4000 → c = 200, t = 500। 12(200) + 3(500) = 2400 + 1500 = ₹3900",
+  ee:"10c = 4t → t = 2.5c. 15c + 2(2.5c) = 20c = 4000 → c = 200, t = 500. 12(200) + 3(500) = 2400 + 1500 = ₹3900"},
+ {t:"गणित / Maths",
+  q:"एक व्यक्ति अपनी आय का 80% खर्च करता है। यदि उसकी आय में 25% की वृद्धि हो जाती है और उसके खर्च में 20% की वृद्धि हो जाती है, तो उसकी बचत में कितने प्रतिशत की वृद्धि होगी?",
+  qe:"A person spends 80% of his income. If his income increases by 25% and his expenditure increases by 20%, by what percentage will his savings increase?",
+  o:["25%","100%","75%","45%"], a:3,
+  e:"आय = 100, खर्च = 80, बचत = 20। नई आय = 125, नया खर्च = 96, नई बचत = 29। वृद्धि = 9/20 × 100 = 45%",
+  ee:"Income = 100, Expense = 80, Savings = 20. New income = 125, new expense = 96, new savings = 29. Increase = 9/20 × 100 = 45%"},
+ {t:"लिफ्ट का प्रश्न / Lift Problem",
+  q:"द्रविड़ एक इमारत की 11वीं मंजिल पर लिफ्ट में चढ़ता है और 57 मंजिल प्रति मिनट की गति से ऊपर जाता है। उसी समय अल्बर्ट उसी इमारत की 51वीं मंजिल पर दूसरी लिफ्ट में चढ़ता है और 63 मंजिल प्रति मिनट की गति से नीचे आता है। यदि दोनों अपनी-अपनी गति से चलते रहें, तो उनकी लिफ्टें किस मंजिल पर एक-दूसरे के रास्ते को काटेंगी?",
+  qe:"Dravid enters a lift on the 11th floor of a building and goes up at 57 floors per minute. At the same time, Albert enters another lift on the 51st floor of the same building and comes down at 63 floors per minute. If both keep moving at their own speeds, at which floor will their lifts cross each other?",
+  o:["30","37","28","19"], a:0,
+  e:"दूरी = 51 − 11 = 40 मंजिल। आपेक्षिक गति = 57 + 63 = 120/मिनट। समय = 40/120 = 1/3 मिनट। द्रविड़ ऊपर गया = 57 × 1/3 = 19। मंजिल = 11 + 19 = 30वीं",
+  ee:"Gap = 51 − 11 = 40 floors. Relative speed = 57 + 63 = 120/min. Time = 40/120 = 1/3 min. Dravid climbs 57 × 1/3 = 19. Floor = 11 + 19 = 30th"},
+ {t:"छूट एवं लाभ / Discount & Profit",
+  q:"एक दुकानदार किसी वस्तु का अंकित मूल्य उसके क्रय मूल्य से 80% अधिक रखता है। वह उस वस्तु पर क्रमशः 15% और 20% की दो छूट देता है। उसका कुल लाभ प्रतिशत कितना होगा?",
+  qe:"A shopkeeper marks an article 80% above its cost price. He gives two successive discounts of 15% and 20% on it. What will be his overall profit percentage?",
+  o:["18.4%","24.8%","22.4%","20.6%"], a:2,
+  e:"क्रय मूल्य = 100, अंकित मूल्य = 180। विक्रय मूल्य = 180 × 0.85 × 0.80 = 122.4। लाभ = 22.4%",
+  ee:"CP = 100, Marked Price = 180. SP = 180 × 0.85 × 0.80 = 122.4. Profit = 22.4%"}
+];
+
+let i=0, ans=[], sel=null, left=SEC, tm=null, pname="";
+const $=s=>document.querySelector(s), app=$("#app");
+
+/* ---------- visit tracking (db + user capabilities) ---------- */
+let db=null, user=null, uid=null, owner=false, myRef=null;
+
+async function initTracking(){
+  try{
+    if(!(window.claude && window.claude.use)) return;
+    user = await window.claude.use("user");
+    db = await window.claude.use("db");
+    if(!user || !db) return;
+    uid = await user.id();
+    owner = await user.isOwner();
+    if(owner){ startOwnerPanel(); return; }
+    if(!uid) return;
+    let cw=null; try{ cw = await user.can("data.write"); }catch(e){}
+    if(cw===false) return;
+    $("#foot").hidden = false;
+    myRef = db.collection("visits").doc(uid);
+    const s = await myRef.get();
+    const now = Date.now();
+    if(s.exists){ const d=s.data()||{}; await myRef.update({lastOpenAt:now, opens:(d.opens||0)+1}); }
+    else { await myRef.set({firstOpenAt:now, lastOpenAt:now, opens:1, started:false}); }
+  }catch(e){ myRef=null; }
+}
+async function track(patch){
+  if(!myRef) return;
+  try{ await myRef.update(patch); }catch(e){}
+}
+
+function fmt(ts){
+  if(!ts) return "—";
+  try{ return new Date(ts).toLocaleString("en-IN",{timeZone:"Asia/Kolkata",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}); }catch(e){ return String(ts); }
+}
+
+function startOwnerPanel(){
+  const box=$("#owner"); box.hidden=false;
+  box.innerHTML='<div class="card"><h2>Visitors / किसने खोला</h2><p class="sm" id="ov">Loading…</p></div>';
+  let slow=setTimeout(()=>{const p=$("#ov"); if(p) p.textContent="अभी data नहीं पहुँच पा रहा / Can't reach the data yet.";},10000);
+  db.collection("visits").onSnapshot(async snap=>{
+    clearTimeout(slow);
+    const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+    rows.sort((a,b)=>(b.lastOpenAt||0)-(a.lastOpenAt||0));
+    let names={};
+    try{ names=await user.profiles(rows.map(r=>r.id)); }catch(e){}
+    const host=$("#owner .card"); host.replaceChildren();
+    const h=document.createElement("h2"); h.textContent="Visitors / किसने खोला ("+rows.length+")"; host.appendChild(h);
+    if(!rows.length){
+      const p=document.createElement("p"); p.className="sm";
+      p.textContent="अभी किसी ने link नहीं खोला। / Nobody has opened the link yet.";
+      host.appendChild(p); return;
+    }
+    const wrap=document.createElement("div"); wrap.className="tbl";
+    const t=document.createElement("table");
+    const hd=t.createTHead().insertRow();
+    ["Name","Opened","Status","Score"].forEach(x=>{const th=document.createElement("th"); th.textContent=x; hd.appendChild(th);});
+    const tb=t.createTBody();
+    rows.forEach(r=>{
+      const tr=tb.insertRow();
+      const nm=(names[r.id]&&names[r.id].name)||"Someone";
+      tr.insertCell().textContent=nm;
+      tr.insertCell().textContent=fmt(r.lastOpenAt)+(r.opens>1?" ×"+r.opens:"");
+      const c=tr.insertCell(); const pill=document.createElement("span"); pill.className="pill";
+      if(r.finishedAt){pill.className+=" done"; pill.textContent="Finished";}
+      else if(r.started){pill.className+=" run"; pill.textContent="Started";}
+      else pill.textContent="Opened only";
+      c.appendChild(pill);
+      tr.insertCell().textContent=r.finishedAt?(r.score+"/"+r.total):"—";
+    });
+    wrap.appendChild(t); host.appendChild(wrap);
+  },()=>{ clearTimeout(slow); const p=$("#ov"); if(p) p.textContent="Visitors list unavailable."; });
+}
+
+/* ---------- test ---------- */
+function start(){ track({started:true,startedAt:Date.now()}); i=0; ans=[]; show(); }
+
+function show(){
+  if(i>=Q.length) return result();
+  const x=Q[i]; sel=null; left=SEC;
+  app.innerHTML=`<div class="card">
+   <div class="top"><span>प्रश्न ${i+1}/${Q.length} · <span class="tag">${x.t}</span></span><span class="timer" id="tm">${SEC}</span></div>
+   <div class="bar"><i id="pb"></i></div>
+   <h2>${x.q}</h2><h2 class="en">${x.qe}</h2>
+   ${x.o.map((o,k)=>`<button class="opt" data-k="${k}">(${"ABCD"[k]}) ${o}</button>`).join("")}
+  </div>
+  <button class="btn" id="nx">${i==Q.length-1?"जमा करें / Submit":"अगला / Next"}</button>`;
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    sel=+b.dataset.k;
+    document.querySelectorAll(".opt").forEach(c=>c.classList.remove("sel"));
+    b.classList.add("sel");
+  });
+  $("#nx").onclick=next;
+  clearInterval(tm);
+  tm=setInterval(()=>{
+    left--; $("#tm").textContent=left;
+    $("#pb").style.width=(left/SEC*100)+"%";
+    if(left<=10) $("#tm").classList.add("low");
+    if(left<=0) next();
+  },1000);
+}
+function next(){clearInterval(tm); ans[i]={s:sel,t:SEC-left}; i++; show();}
+function result(){
+  let c=0,w=0,u=0;
+  Q.forEach((x,k)=>{const s=ans[k].s; if(s===null)u++; else if(s===x.a)c++; else w++;});
+  track({finishedAt:Date.now(),score:c,total:Q.length,pname});
+  const lines=Q.map((x,k)=>{const s=ans[k].s; const mark=s===null?"⏭":(s===x.a?"✅":"❌"); const qs=x.qe.length>70?x.qe.slice(0,70)+"...":x.qe; const pick=s===null?"छोड़ा / Skipped":"("+"ABCD"[s]+") "+x.o[s]; return "Q"+(k+1)+". "+qs+"\n   उनका जवाब: "+pick+" "+mark+(s!==null&&s!==x.a?"\n   सही जवाब: ("+"ABCD"[x.a]+") "+x.o[x.a]:"")+"\n   समय: "+ans[k].t+"s\n";});
+  const waMsg="Maths Mock Test\nनाम: "+pname+"\nस्कोर: "+c+"/"+Q.length+" (सही "+c+", गलत "+w+", छोड़े "+u+")\n\n"+lines.join("\n");
+  const wa="https://wa.me/917869952173?text="+encodeURIComponent(waMsg);
+  app.innerHTML=`<div class="card"><div class="sm center">आपका स्कोर / Your Score</div>
+   <div class="score">${c}/${Q.length}</div>
+   <div class="sm center">सही/Correct ${c} · गलत/Wrong ${w} · छोड़े/Skipped ${u}</div></div>`+
+  Q.map((x,k)=>{const s=ans[k].s;
+   return `<div class="card"><div class="sm">प्रश्न / Q ${k+1} · समय / Time: ${ans[k].t}s</div><h2>${x.q}</h2><h2 class="en">${x.qe}</h2>
+   ${x.o.map((o,j)=>`<div class="opt ${j===x.a?"ok":(j===s?"bad":"")}">(${"ABCD"[j]}) ${o}</div>`).join("")}
+   <div class="sm">${s===null?"आपने यह प्रश्न छोड़ा / Skipped. ":""}<b>हल:</b> ${x.e}<br><b>Solution:</b> ${x.ee}</div></div>`}).join("")+
+  `<a class="btn" id="sh" target="_blank" rel="noopener" href="${wa}" style="display:block;box-sizing:border-box;text-align:center;text-decoration:none;margin-bottom:10px;background:#25D366;color:#073b1a">WhatsApp पर स्कोर भेजें / Send score on WhatsApp</a><button class="btn" id="rt">दोबारा दें / Retry</button>`;
+  $("#rt").onclick=start;
+
+}
+
+app.innerHTML=`<div class="card"><h1>Maths Mock Test</h1><p class="sm">${Q.length} प्रश्न · हर प्रश्न ${SEC} सेकंड। समय खत्म होते ही अगला प्रश्न अपने-आप आ जाएगा।<br>${Q.length} questions · ${SEC} seconds each. The next question appears automatically when time runs out.</p><label class="sm" for="nm">आपका नाम / Your name</label><input id="nm" type="text" maxlength="40" autocomplete="name" style="width:100%;padding:12px;margin-top:6px;border:1.5px solid var(--bd);border-radius:10px;background:transparent;color:var(--tx);font:inherit"></div><button class="btn" id="go">शुरू करें / Start</button>`;
+$("#go").onclick=()=>{ pname=($("#nm").value||"").trim(); if(!pname){ $("#nm").focus(); $("#nm").placeholder="पहले नाम लिखें / Enter your name first"; return; } start(); };
+initTracking();
+</script>
+
+</body></html>
